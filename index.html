@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TempMail</title>
-  <link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/x-icon" href="tempmail.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="tempmail.png">
 </head>
 <body>
 
@@ -14,14 +14,23 @@
         
         <button class="button" id="generateBtn">Generate Email</button>
         <div id="emailBox" class="email-box"></div>
-        
+        <button id="copyBtn" class="copy-button">Copy Email</button>
+
         <div class="email-container">
             <button class="button" id="checkEmailBtn">Check Inbox</button>
             <div class="email-list" id="emailList"></div>
         </div>
 
-      <script src="api.js"></script>
-       
+     
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="closeModal">&times;</span>
+                <div id="emailDetails"></div>
+            </div>
+        </div>
     </div>
+
+    <script src="api.js"></script>
+
 </body>
 </html>
