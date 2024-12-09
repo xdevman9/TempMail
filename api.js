@@ -2,9 +2,13 @@ const apiUrl = 'https://www.1secmail.com/api/v1/';
 
 const generateBtn = document.getElementById('generateBtn');
 const emailBox = document.getElementById('emailBox');
+const copyBtn = document.getElementById('copyBtn');
 const checkEmailBtn = document.getElementById('checkEmailBtn');
 const emailList = document.getElementById('emailList');
 const emailContainer = document.querySelector('.email-container');
+const modal = document.getElementById("myModal");
+const emailDetails = document.getElementById("emailDetails");
+const closeModal = document.getElementById("closeModal");
 
 function generateEmail() {
     fetch(`${apiUrl}?action=genRandomMailbox&count=1`)
@@ -13,6 +17,9 @@ function generateEmail() {
             const randomEmail = data[0];
             emailBox.innerText = randomEmail;
             emailContainer.style.display = 'block';
+
+  
+            copyBtn.style.display = 'block';
 
             localStorage.setItem('generatedEmail', randomEmail);
         });
@@ -49,7 +56,24 @@ function viewMessage(id, login, domain) {
     fetch(`${apiUrl}?action=readMessage&login=${login}&domain=${domain}&id=${id}`)
         .then(response => response.json())
         .then(data => {
-            alert(`From: ${data.from}\nSubject: ${data.subject}\nMessage: ${data.body}`);
+           
+            emailDetails.innerHTML = `
+                <strong>From:</strong> ${data.from}<br>
+                <strong>Subject:</strong> ${data.subject}<br><br>
+                <strong>Message:</strong><br>${data.body}
+            `;
+            modal.style.display = "block";
+        });
+}
+
+function copyEmail() {
+    const email = emailBox.innerText;
+    navigator.clipboard.writeText(email)
+        .then(() => {
+            alert('Email copied to clipboard!');
+        })
+        .catch(err => {
+            console.error('Error copying email: ', err);
         });
 }
 
@@ -58,9 +82,21 @@ window.onload = function() {
     if (savedEmail) {
         emailBox.innerText = savedEmail;
         emailContainer.style.display = 'block';
+        copyBtn.style.display = 'block';  
     }
 }
 
-// Event listeners
+
 generateBtn.addEventListener('click', generateEmail);
 checkEmailBtn.addEventListener('click', checkInbox);
+copyBtn.addEventListener('click', copyEmail);
+closeModal.addEventListener('click', function() {
+    modal.style.display = "none";
+});
+
+
+window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+});
